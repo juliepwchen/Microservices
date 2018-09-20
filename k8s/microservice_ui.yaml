@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservice-ui 
+  labels:
+    app:  microservice-ui
+spec:
+  ports:
+   - port: 3000
+     protocol: TCP
+     nodePort: 30000
+  selector:
+    app: microservice-ui 
+  type: LoadBalancer
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservice-ui
+  labels: 
+    app: microservice-ui 
+spec:
+  selector: 
+    matchLabels:
+      app: microservice-ui 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: microservice-ui
+    spec:
+      containers:
+        - name: microservice-ui
+          image: juliepwchen/microservice_ui
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 3000

@@ -1,0 +1,16 @@
+{
+  "name": "kafka-consumer-stream",
+  "version": "1.0.0",
+  "description": "",
+  "main": "kafka_consumerStream.js",
+  "scripts": {
+    "start": "node --max-old-space-size=24576 kafka_consumerStream.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "kafka-node": "^3.0.0"
+  }
+}

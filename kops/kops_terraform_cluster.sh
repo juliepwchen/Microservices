@@ -1,0 +1,12 @@
+kops create cluster \
+--name=kt.cluster.k8s.local \
+--state=s3://kt-cluster-bucket \
+--authorization RBAC \
+--zones=us-west-2a,us-west-2b,us-west-2c \
+--node-count=3 \
+--master-count=3 \
+--zones=us-west-2a, us-west-2b, us-west-2c \
+--master-zones=us-west-2a,us-west-2b,us-west-2c \
+--out=kops_terraform \
+--target=terraform \
+--ssh-public-key=~/.ssh/kopsadmin.pub

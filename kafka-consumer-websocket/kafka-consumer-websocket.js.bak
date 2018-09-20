@@ -1,0 +1,117 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const _ = require('lodash');
+
+//const WebSocketServer = require('websocket').server;
+//const http = require('http');
+
+///////////////////////
+// Kafka 
+///////////////////////
+const { Consumer, KafkaClient } = require('kafka-node');
+const client = new KafkaClient({kafkaHost: 'localhost:9092'});
+const options = {
+    groupId: 'CoinbaseGroup'
+};
+const consumer = new Consumer(client, 
+    [{ topic: 'topicBitcoinSell', partition: 0 }], 
+    options);
+const consumerBuy = new Consumer(client, [{ topic: 'topicBitcoinBuy', partition: 0 }], options);
+
+consumer.on('message', function (message) {
+    console.log(parseInt(message.value));
+});
+
+consumer.on('error', function (err) {
+    console.log(err);
+});
+
+///////////////////////
+// Websocket Server
+///////////////////////
+/* const server = http.createServer(function(req, res) {
+    console.log((new Date()) + ' Received request for ' + req.url);
+    res.writeHead(404);
+    res.end();
+});
+server.listen(5003, function() {
+    console.log((new Date()) + 'HTTP Server is listening on port 5003');
+});
+wsServer = new WebSocketServer({
+    httpServer: server,
+    autoAcceptConnections: false
+});
+function originIsAllowed(origin) {
+    console.log('Connection requested from origin ' + origin);
+
+    valid_origins = [
+        'http://localhost:5003',
+        '127.0.0.1',
+        'null'
+    ];
+
+    if (valid_origins.indexOf(origin) != -1) {
+        console.log('Connection accepted from origin ' + origin);
+        return true;
+    }
+
+    console.log('Origin ' + origin + ' is not allowed.')
+    return false;
+}
+wsServer.on('connection', function(webSocketConnection) {
+    console.log('Connection started.');
+});
+wsServer.on('request', function(request) {
+    if (!originIsAllowed(request.origin)) {
+      request.reject();
+      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+      return;
+    }
+    
+    var connection = request.accept('echo-protocol', request.origin);
+    console.log((new Date()) + ' Connection accepted.');
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') {
+            console.log('Received Message: ' + message.utf8Data);
+            //connection.sendUTF(message.utf8Data);
+            consumerSell.on('message', function (event) {
+                let price = parseInt(event.value);
+                console.log('BEFORE websocket send ', price);
+                connection.sendUTF(price.toString());
+                //setTimeout(sendNumber, 1000);
+            });
+        }
+        else if (message.type === 'binary') {
+            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+            connection.sendBytes(message.binaryData);
+        }
+    });
+    connection.on('close', function(reasonCode, description) {
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+    });
+
+    function sendNumber() {
+        if (connection.connected) {
+            consumerSell.on('message', function (message) {
+                let number = parseInt(message.value);
+                console.log('BEFORE websocket send ', number);
+                connection.sendUTF(number.toString());
+                setTimeout(sendNumber, 1000);
+            });
+        }
+    }
+    //sendNumber();
+});
+*/
+///////////////////////
+// REST API
+///////////////////////
+const app = express(); 
+app.use(bodyParser.json());
+
+app.get('/coinbase', (req, res)=>{
+    res.send({ Greetings: 'Kafka Consume+Transform to topicBitcoinBuy+topicBitcoinSell running at Port 5002'});
+});
+
+const PORT = process.env.PORT || 5004;
+app.listen(PORT); 

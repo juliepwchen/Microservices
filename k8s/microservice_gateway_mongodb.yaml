@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservice-gateway-mongodb
+  labels:
+    app: microservice-gateway-mongodb  
+spec:
+  ports:
+   - port: 5000
+     protocol: TCP
+     nodePort: 30010
+  selector:
+    app: microservice-gateway-mongodb
+  type: LoadBalancer
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservice-gateway-mogodb
+  labels: 
+    app: microservice-gateway-mongodb 
+spec:
+  selector: 
+    matchLabels:
+      app: microservice-gateway-mongodb 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: microservice-gateway-mongodb
+    spec:
+      containers:
+        - name: microservice-gateway-mongodb
+          image: juliepwchen/microservice_gateway_mongodb
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5000

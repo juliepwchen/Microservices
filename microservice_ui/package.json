@@ -1,0 +1,23 @@
+{
+  "name": "InsightDataScienceDemo",
+  "version": "1.0.0",
+  "description": "Scaling Microservices with Kubernetes",
+  "main": "index.js",
+  "scripts": {
+    "start": "node microservice_ui.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cpwjulieinsight/InsightDataScienceDemo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cpwjulieinsight/InsightDataScienceDemo/issues"
+  },
+  "homepage": "https://github.com/cpwjulieinsight/InsightDataScienceDemo#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
