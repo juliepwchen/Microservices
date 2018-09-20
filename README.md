@@ -1,4 +1,4 @@
-# Demo 18C - Scaling Microservices With Kubernetes
+# Demo - Scaling Microservices With Kubernetes
 
 ## Purpose
 
